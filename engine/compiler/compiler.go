@@ -103,6 +103,9 @@ type Compiler struct {
 	// Mount is an optional field that overrides the default
 	// workspace volume and mounts to the host path
 	Mount string
+
+	// SystemLogDriver specifies that containers should not set any LogConfig and instead rely on the system default
+	SystemLogDriver bool
 }
 
 // Compile compiles the configuration file.
@@ -272,6 +275,7 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 		dst.Envs = environ.Combine(envs, dst.Envs)
 		dst.Volumes = append(dst.Volumes, mount)
 		dst.Labels = labels
+		dst.SystemLogDriver = c.SystemLogDriver
 		setupScript(src, dst, os)
 		setupWorkdir(src, dst, full)
 		spec.Steps = append(spec.Steps, dst)
@@ -289,6 +293,7 @@ func (c *Compiler) Compile(ctx context.Context, args runtime.CompilerArgs) runti
 		dst.Envs = environ.Combine(envs, dst.Envs)
 		dst.Volumes = append(dst.Volumes, mount)
 		dst.Labels = labels
+		dst.SystemLogDriver = c.SystemLogDriver
 		setupScript(src, dst, os)
 		setupWorkdir(src, dst, full)
 		spec.Steps = append(spec.Steps, dst)

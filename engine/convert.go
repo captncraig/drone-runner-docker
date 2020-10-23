@@ -56,6 +56,9 @@ func toHostConfig(spec *Spec, step *Step) *container.HostConfig {
 		Privileged: step.Privileged,
 		ShmSize:    step.ShmSize,
 	}
+	if step.SystemLogDriver {
+		config.LogConfig = container.LogConfig{}
+	}
 	// windows does not support privileged so we hard-code
 	// this value to false.
 	if spec.Platform.OS == "windows" {
